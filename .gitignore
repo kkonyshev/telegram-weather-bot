@@ -20,4 +20,8 @@ bin
 .project
 .settings
 .vscode
+
+/target
+
+#
 /CREDENTIALS

@@ -37,15 +37,24 @@ val webUtilsDependencies = Seq(
   "net.ruippeixotog" %% "scala-scraper" % "2.1.0"
 )
 
-libraryDependencies ++= coreDependencies ++ 
-                        sttpDependencies ++ 
-                        sttpClientDependencies ++ 
-                        circeDependencies ++ 
-                        telegramBotDependency ++ 
+libraryDependencies ++= coreDependencies ++
+                        sttpDependencies ++
+                        sttpClientDependencies ++
+                        circeDependencies ++
+                        telegramBotDependency ++
                         webUtilsDependencies
 
-
+// ##
 enablePlugins(JavaAppPackaging)
-
 // Disable javadoc packaging
 mappings in (Compile, packageDoc) := Seq()
+
+// docker packaging configuration
+enablePlugins(DockerPlugin)
+enablePlugins(AshScriptPlugin)
+mainClass in Compile := Some("t.bot.weather.Application")
+dockerBaseImage      := "openjdk:8-jre-alpine"
+
+// workaround for https://github.com/sbt/sbt-native-packager/issues/1202
+daemonUserUid in Docker := None
+daemonUser in Docker    := "daemon"
