@@ -33,7 +33,15 @@ object RestService extends IOApp with Instrumented {
 
   def run(args: List[String]): IO[ExitCode] =
     BlazeServerBuilder[IO]
-      .bindHttp(com.typesafe.config.ConfigFactory.load().getInt("http.port"), "localhost")
+      .bindHttp(
+        sys.env
+          .getOrElse[String](
+            "http.port",
+            com.typesafe.config.ConfigFactory.load().getString("http.port")
+          )
+          .toInt,
+        "0.0.0.0"
+      )
       .withHttpApp(helloWorldService)
       .serve
       .compile
