@@ -2,7 +2,7 @@ name := "telegram-weather-bot"
 
 version := "0.1"
 
-scalaVersion := "2.11.12"
+scalaVersion := "2.12.10"
 
 val sttpVersion = "1.6.4"
 val circleVersion = "0.11.1"
@@ -37,12 +37,34 @@ val webUtilsDependencies = Seq(
   "net.ruippeixotog" %% "scala-scraper" % "2.1.0"
 )
 
+val metricsDependencies = Seq(
+  "nl.grons" %% "metrics4-scala" % "4.0.1",
+  "nl.grons" %% "metrics4-akka_a25" % "4.1.1",
+  "nl.grons" %% "metrics4-scala-hdr" % "4.1.1"
+  )
+
+val Http4sVersion = "0.20.11"
+
+val http4sDependencies = Seq(
+  "org.http4s"     %% "http4s-blaze-server" % Http4sVersion,
+  "org.http4s"     %% "http4s-circe"        % Http4sVersion,
+  "org.http4s"     %% "http4s-dsl"          % Http4sVersion,
+  "ch.qos.logback" %  "logback-classic"     % "1.2.1",
+  // Optional for auto-derivation of JSON codecs
+  "io.circe" %% "circe-generic" % circleVersion,
+  "io.circe" %% "circe-literal" % circleVersion,
+  "org.scalactic" %% "scalactic" % "3.0.1",
+  "org.scalatest" %% "scalatest" % "3.0.1" % "test"
+  )
+
 libraryDependencies ++= coreDependencies ++
                         sttpDependencies ++
                         sttpClientDependencies ++
                         circeDependencies ++
                         telegramBotDependency ++
-                        webUtilsDependencies
+                        webUtilsDependencies ++
+                        metricsDependencies ++
+                        http4sDependencies
 
 // ##
 enablePlugins(JavaAppPackaging)

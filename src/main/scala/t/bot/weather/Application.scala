@@ -6,9 +6,9 @@ object Application extends App {
   val bot = new WeatherBot(api_token)
   bot.run()
 
-  while (true) {}
-  sys.addShutdownHook(() => {
-    println("shutting down")
-    bot.shutdown()
-  })
+  RestService.run(Nil).unsafeToFuture()
 }
+
+trait Instrumented
+    extends nl.grons.metrics4.scala.InstrumentedBuilder
+    with nl.grons.metrics4.scala.DefaultInstrumented

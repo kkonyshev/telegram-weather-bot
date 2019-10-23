@@ -8,10 +8,17 @@ import com.bot4s.telegram.future.Polling
 import scala.concurrent.Future
 
 class WeatherBot(token: String)
-    extends AbstractBot(token) with Polling with Commands[Future] with WeatherDataFetcher {
+    extends AbstractBot(token) with Polling with Commands[Future] with WeatherDataFetcher
+    with Instrumented {
+
+  val hits = metricRegistry.counter("WeatherBot.hits")
+
+  healthCheck("WeatherBot") {}
 
   onMessage({ implicit msg =>
     if (msg.location.nonEmpty) {
+      hits.inc(1)
+
       fetchForecast(msg.location.get.latitude, msg.location.get.longitude) match {
         case Right(forecast) =>
           replyMd(forecast.toString, disableWebPagePreview = Some(true)).void
