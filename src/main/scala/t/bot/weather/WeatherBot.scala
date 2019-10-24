@@ -1,5 +1,6 @@
 package t.bot.weather
 
+import cats.effect.IO
 import cats.instances.future._
 import cats.syntax.functor._
 import com.bot4s.telegram.api.declarative.Commands
@@ -29,4 +30,12 @@ class WeatherBot(token: String)
     } else Future.successful(Unit)
   })
 
+}
+
+object WeatherBot {
+  def io: IO[Unit] = {
+    val api_token = com.typesafe.config.ConfigFactory.load().getString("bot.api_token")
+    val bot = new WeatherBot(api_token)
+    IO.fromFuture(IO(bot.run()))
+  }
 }

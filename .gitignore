@@ -22,6 +22,8 @@ bin
 .vscode
 
 /target
+/project/project/
+/project/target/
 
 #
 /CREDENTIALS

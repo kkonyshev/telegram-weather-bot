@@ -1,12 +1,19 @@
 package t.bot.weather
 
+import cats.effect.{ContextShift, IO}
+
 object Application extends App {
 
-  val api_token = com.typesafe.config.ConfigFactory.load().getString("bot.api_token")
-  val bot = new WeatherBot(api_token)
-  bot.run()
+  implicit val cs: ContextShift[IO] =
+    IO.contextShift(scala.concurrent.ExecutionContext.Implicits.global)
 
-  RestService.run(Nil).unsafeToFuture()
+  val program = for {
+    _ <- WeatherBot.io.start
+    exitCode <- RestService.run(Nil)
+  } yield {
+    println(s"Exited with code: $exitCode")
+  }
+  program.unsafeRunSync()
 }
 
 trait Instrumented
